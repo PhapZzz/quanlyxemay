@@ -32,7 +32,12 @@ public class ChiTietSanPham_GUI extends JFrame {
             
             // Set layout
             setLayout(new BorderLayout());
-            JPanel Panel_Left = new JPanel(new GridLayout(11,2,1,10));
+            JPanel Panel_Left = new JPanel(new GridBagLayout());
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(5, 5, 5, 5);
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+
+            
             JLabel MaChiTietXelbl = new JLabel("Nhập mã chi tiết xe: ");
             JTextField txtMaChiTietXe = new JTextField(18);
             JLabel MaXelbl = new JLabel("Nhập mã xe: ");
@@ -50,30 +55,43 @@ public class ChiTietSanPham_GUI extends JFrame {
             JLabel TrangThailbl = new JLabel("Nhập trạng thái xe: ");
             JTextField txtTrangThai = new JTextField(18);
             // các nút chức năng
-            JButton btnThem = new JButton("Thêm");
-            JButton btnSua = new JButton("Sửa");
-            JButton btnXoa = new JButton("Xóa");
-            JButton btnTimKiem = new JButton("Tìm kiếm");
-            JButton btnLamMoi = new JButton("Làm mới");
-           
+            RoundButton btnThem = new RoundButton("Thêm",30);
+            setButton(btnThem);
+            RoundButton btnSua = new RoundButton("Sửa",30);
+            RoundButton btnXoa = new RoundButton("Xóa",30);
+            RoundButton btnTimKiem = new RoundButton("Tìm kiếm",30);
+            RoundButton btnLamMoi = new RoundButton("Làm mới",30);
+            setButton(btnSua);
+            setButton(btnXoa);
+            setButton(btnTimKiem);
+            setButton(btnLamMoi);
+            int row = 0;
+            addFormRow(Panel_Left, gbc, row++, MaChiTietXelbl, txtMaChiTietXe);
+            addFormRow(Panel_Left, gbc, row++, MaXelbl, txtMaXe);
+            addFormRow(Panel_Left, gbc, row++, SoKhunglbl, txtSoKhung);
+            addFormRow(Panel_Left, gbc, row++, SoMaylbl, txtSoMay);
+            addFormRow(Panel_Left, gbc, row++, MaPhieuNhaplbl, txtMaPhieuNhap);
+            addFormRow(Panel_Left, gbc, row++, Colorlbl, txtColor);
+            addFormRow(Panel_Left, gbc, row++, imglbl, txtimg);
+            addFormRow(Panel_Left, gbc, row++, TrangThailbl, txtTrangThai);
 
-            Panel_Left.add(MaChiTietXelbl);Panel_Left.add(txtMaChiTietXe);
-            //Panel_Left.add(MaXelbl);Panel_Left.add(txtMaXe);
-            Panel_Left.add(SoKhunglbl);Panel_Left.add(txtSoKhung);
-            Panel_Left.add(SoMaylbl);Panel_Left.add(txtSoMay);
-            Panel_Left.add(MaPhieuNhaplbl);Panel_Left.add(txtMaPhieuNhap);
-            Panel_Left.add(Colorlbl);Panel_Left.add(txtColor);
-            Panel_Left.add(imglbl);Panel_Left.add(txtimg );
-            Panel_Left.add(TrangThailbl);Panel_Left.add(txtTrangThai);
+            JPanel panelButton = new JPanel(new GridLayout(3, 2, 10,10 ));
 
-            Panel_Left.add(btnThem);
-            Panel_Left.add(btnSua);
-            Panel_Left.add(btnXoa);
-            Panel_Left.add(btnTimKiem);
-            Panel_Left.add(btnLamMoi);
 
+            panelButton.add(btnThem);
+            panelButton.add(btnSua);
+            panelButton.add(btnXoa);
+            panelButton.add(btnTimKiem);
+            panelButton.add(btnLamMoi);
+            gbc.gridx = 0;
+            gbc.gridy = row++;
+            gbc.gridwidth = 2;
+            Panel_Left.add(panelButton, gbc);
+
+            JPanel wrapperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+            wrapperPanel.add(Panel_Left);
             add(Panel_N,BorderLayout.NORTH);
-            add(Panel_Left,BorderLayout.WEST);
+            add(wrapperPanel,BorderLayout.WEST);
 
             // Khởi tạo model bảng ghi dè phương thức
             //Nếu cột thứ 6 (đếm từ 0, tức cột thứ 7 trên giao diện) thì:
@@ -151,6 +169,25 @@ public class ChiTietSanPham_GUI extends JFrame {
                 return null;
             }
         }
+
+        private void addFormRow(JPanel panel, GridBagConstraints gbc, int row, JLabel label, JComponent field) {
+            label.setFont(new Font("Arial", Font.PLAIN, 14));
+            gbc.gridx = 0;
+            gbc.gridy = row;
+            gbc.weightx = 0.3;
+            panel.add(label, gbc);
+    
+            gbc.gridx = 1;
+            gbc.weightx = 0.7;
+            panel.add(field, gbc);
+        }
+        public void setButton(RoundButton s){
+            s.setBackground(Color.WHITE); 
+            s.setFont(14, Color.BLACK); 
+            s.setButtonSize(120, 30);
+            s.setBorderWidth(1); 
+        }
+    
 
         
     }

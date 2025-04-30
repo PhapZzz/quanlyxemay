@@ -1,252 +1,254 @@
 package GUI;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-
-import BUS.SanPhamBUS;
-import DTO.SanPhamDTO;
-import BUS.HangxeBUS;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
+import BUS.SanPhamBUS;
+import DTO.SanPhamDTO;
+import BUS.HangxeBUS;
+
 
 public class SanPham_GUI extends JPanel {
     private JTable table;
     private DefaultTableModel model;
     private index mainFrame;
     private SanPhamBUS SanPhamBUS = new SanPhamBUS();
-    private JButton btnThem, btnSua, btnXoa, btnTimKiem, btnLamMoi, btnChitiet;
+    private RoundButton btnThem, btnSua, btnXoa, btnTimKiem, btnLamMoi, btnChitiet;
 
     public SanPham_GUI(index frame) {
         this.mainFrame = frame;
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(10, 10));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        // ======= TITLE =======
         JLabel title = new JLabel("DANH SÁCH SẢN PHẨM", JLabel.CENTER);
-        title.setFont(new Font("Arial", Font.BOLD, 20));
+        title.setFont(new Font("Arial", Font.BOLD, 24));
         add(title, BorderLayout.NORTH);
 
+        // ======= TABLE =======
         model = new DefaultTableModel();
-        model.setColumnIdentifiers(new String[]{"Mã xe", "Tên xe", "Hãng", "Giá", "sl"});
-        
+        model.setColumnIdentifiers(new String[]{"Mã xe", "Tên xe", "Hãng", "Giá", "Số lượng"});
         table = new JTable(model);
-        
         JScrollPane scroll = new JScrollPane(table);
         add(scroll, BorderLayout.CENTER);
-        
 
+        // ======= PANEL LEFT (FORM) =======
+        JPanel panelLeft = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         HangxeBUS hangBUS = new HangxeBUS();
-
         List<String> listHang = hangBUS.getAllHang_Display();
 
+        // Trường nhập liệu
+        JLabel lblMaXe = new JLabel("Nhập mã xe:");
+        JTextField txtMaXe = new JTextField(18);
+
+        JLabel lblTenXe = new JLabel("Nhập tên xe:");
+        JTextField txtTenXe = new JTextField(18);
+
+        JLabel lblMaHang = new JLabel("Chọn hãng:");
         JComboBox<String> cboHang = new JComboBox<>();
         for (String s : listHang) {
             cboHang.addItem(s);
         }
 
-
-        // các nút chức năng, trường nhập liệu
-        JPanel Panel_left = new JPanel(new GridLayout(8,2,1,10));
-        JLabel MaXelbl = new JLabel("Nhập mã xe: ");
-        JTextField txtMaXe = new JTextField(18);
-        JLabel TenXelbl = new JLabel("Nhập tên xe: ");
-        JTextField txtTenXe = new JTextField(18);
-        JLabel MaHanglbl = new JLabel("Nhập mã hãng: ");
-        //JTextField txtMaHang = new JTextField(15);
-        JLabel Gialbl = new JLabel("Nhập Giá bán: ");
+        JLabel lblGia = new JLabel("Nhập giá bán:");
         JTextField txtGia = new JTextField(18);
-        JLabel sllbl = new JLabel("Nhập số lượng: ");
-        JTextField txtsl = new JTextField(18);
 
+        JLabel lblSL = new JLabel("Nhập số lượng:");
+        JTextField txtSL = new JTextField(18);
 
+        int row = 0;
+        addFormRow(panelLeft, gbc, row++, lblMaXe, txtMaXe);
+        addFormRow(panelLeft, gbc, row++, lblTenXe, txtTenXe);
+        addFormRow(panelLeft, gbc, row++, lblMaHang, cboHang);
+        addFormRow(panelLeft, gbc, row++, lblGia, txtGia);
+        addFormRow(panelLeft, gbc, row++, lblSL, txtSL);
 
+        // ======= BUTTONS =======
+        JPanel panelButton = new JPanel(new GridLayout(3, 2, 15, 15));
+        //btnThem = new JButton("Thêm");
+        //JButtonDAO btnThem = new JButtonDAO("Thêm");
+        btnThem = new RoundButton("Thêm", 30); 
+        btnThem.setBackground(Color.WHITE); 
+        btnThem.setFont(12, Color.BLACK); 
+        btnThem.setButtonSize(130, 25);
+        btnThem.setBorderWidth(1); 
 
-        btnThem = new JButton("Thêm");
-        btnSua = new JButton("Sửa");
-        btnXoa = new JButton("Xóa");
-        btnTimKiem = new JButton("Tìm kiếm");
-        btnLamMoi = new JButton("Làm mới");
-        btnChitiet = new JButton("Chi Tiết");
-        Panel_left.add(MaXelbl);Panel_left.add(txtMaXe);
-        Panel_left.add(TenXelbl);Panel_left.add(txtTenXe);
-        Panel_left.add(MaHanglbl);Panel_left.add(cboHang);
-        Panel_left.add(Gialbl);Panel_left.add(txtGia);
-        Panel_left.add(sllbl);Panel_left.add(txtsl);
-        Panel_left.add(btnThem);
-        Panel_left.add(btnSua);
-        Panel_left.add(btnXoa);
-        Panel_left.add(btnTimKiem);
-        Panel_left.add(btnLamMoi);
-        Panel_left.add(btnChitiet);
+        btnSua = new RoundButton("Sửa",30);
+        btnSua.setBackground(Color.WHITE); 
+        btnSua.setFont(12, Color.BLACK); 
+        btnSua.setButtonSize(130, 25);
+        btnSua.setBorderWidth(1);
 
-        add(Panel_left, BorderLayout.WEST);
+        btnXoa = new RoundButton("Xóa",30);
+        btnXoa.setBackground(Color.WHITE); 
+        btnXoa.setFont(12, Color.BLACK); 
+        btnXoa.setButtonSize(130, 25);
+        btnXoa.setBorderWidth(1);
 
-        // // === SỰ KIỆN TẠM (chỉ load dữ liệu) ===
-        // loadData();
+        btnTimKiem = new RoundButton("Tìm kiếm",30);
+        btnTimKiem.setBackground(Color.WHITE); 
+        btnTimKiem.setFont(12, Color.BLACK); 
+        btnTimKiem.setButtonSize(130, 25);
+        btnTimKiem.setBorderWidth(1);
 
-            // sự kiện click vào sản phẩm sẽ tự động điền vào Jtextfile
-            table.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    int selectedRow = table.getSelectedRow(); // Lấy chỉ số hàng được chọn
-                    if (selectedRow != -1) { // Kiểm tra xem có hàng nào được chọn không
-                        txtMaXe.setText(model.getValueAt(selectedRow, 0).toString()); 
-                        txtTenXe.setText(model.getValueAt(selectedRow, 1).toString()); 
-                        // Lấy phần tử bạn muốn tìm kiếm (dữ liệu từ JTable)
-                        String searchValue = model.getValueAt(selectedRow, 2).toString();
-                        // Lấy mô hình của JComboBox
-                        DefaultComboBoxModel modelCombo = (DefaultComboBoxModel) cboHang.getModel();
-                        // Duyệt qua tất cả các phần tử trong JComboBox
-                        for (int i = 0; i < modelCombo.getSize(); i++) {
-                            String item = modelCombo.getElementAt(i).toString();
-                            
-                            // Kiểm tra nếu phần tử trong JComboBox chứa chuỗi bạn tìm kiếm
-                            if (item.contains(searchValue)) {
-                                // Nếu tìm thấy, chọn mục đó trong JComboBox
-                                cboHang.setSelectedItem(item);
-                                break; // Dừng vòng lặp khi tìm thấy
-                            }
+        btnLamMoi = new RoundButton("Làm mới",30);
+        btnLamMoi.setBackground(Color.WHITE); 
+        btnLamMoi.setFont(12, Color.BLACK); 
+        btnLamMoi.setButtonSize(130, 25);
+        btnLamMoi.setBorderWidth(1);
+
+        btnChitiet = new RoundButton("Chi tiết",30);
+        btnChitiet.setBackground(Color.WHITE); 
+        btnChitiet.setFont(12, Color.BLACK); 
+        btnChitiet.setButtonSize(130, 25);
+        btnChitiet.setBorderWidth(1);
+
+        panelButton.add(btnThem);
+        panelButton.add(btnSua);
+        panelButton.add(btnXoa);
+        panelButton.add(btnTimKiem);
+        panelButton.add(btnLamMoi);
+        panelButton.add(btnChitiet);
+
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridwidth = 2;
+        panelLeft.add(panelButton, gbc);
+
+        // Bọc Panel_left vào 1 JPanel dùng FlowLayout căn top
+        JPanel wrapperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        wrapperPanel.add(panelLeft);
+
+        add(wrapperPanel, BorderLayout.WEST);   
+
+        // ======= SỰ KIỆN =======
+        table.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                int selectedRow = table.getSelectedRow();
+                if (selectedRow != -1) {
+                    txtMaXe.setText(model.getValueAt(selectedRow, 0).toString());
+                    txtTenXe.setText(model.getValueAt(selectedRow, 1).toString());
+                    String searchValue = model.getValueAt(selectedRow, 2).toString();
+                    DefaultComboBoxModel<String> modelCombo = (DefaultComboBoxModel<String>) cboHang.getModel();
+                    for (int i = 0; i < modelCombo.getSize(); i++) {
+                        if (modelCombo.getElementAt(i).contains(searchValue)) {
+                            cboHang.setSelectedItem(modelCombo.getElementAt(i));
+                            break;
                         }
-                        String giaHienThi = table.getValueAt(selectedRow, 3).toString();
-                        // Bỏ dấu chấm và chữ " VND" nếu có
-                        giaHienThi = giaHienThi.replaceAll("[^\\d]", ""); 
-                        txtGia.setText(giaHienThi);  // → ví dụ: "1000000"
-                        txtsl.setText(model.getValueAt(selectedRow, 4).toString());
+                    }
+                    String giaHienThi = model.getValueAt(selectedRow, 3).toString().replaceAll("[^\\d]", "");
+                    txtGia.setText(giaHienThi);
+                    txtSL.setText(model.getValueAt(selectedRow, 4).toString());
+                }
+            }
+        });
+
+        btnThem.addActionListener(e -> {
+            if (confirmAction("Bạn có chắc chắn muốn thêm sản phẩm này?")) {
+                if (validateFields(txtMaXe, txtTenXe, txtGia, txtSL)) {
+                    if (SanPhamBUS.themSanPham(
+                        txtMaXe.getText(), txtTenXe.getText(), (String) cboHang.getSelectedItem(), txtGia.getText(), txtSL.getText())) {
+                        showMessage("Thêm sản phẩm thành công!");
+                        loadTableData();
+                    } else {
+                        showMessage("Thêm sản phẩm thất bại!");
                     }
                 }
-            });
-    
+            }
+        });
 
-        // sự kiện thêm xe
-        btnThem.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                int option = JOptionPane.showConfirmDialog(
-                null,
-                "Bạn có chắc chắn muốn thêm sản phẩm này?",
-                "Xác nhận",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE
-                );
-                if(option == JOptionPane.YES_OPTION){
-                String maxe = txtMaXe.getText();
-                String tenxe = txtTenXe.getText();
-                String mahang = (String) cboHang.getSelectedItem();
-                String Gia = txtGia.getText();
-                String sl =txtsl.getText();
-                if (txtMaXe.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Mã xe không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    return;
+        btnSua.addActionListener(e -> {
+            if (confirmAction("Bạn có chắc chắn muốn update sản phẩm này?")) {
+                if (validateFields(txtMaXe, txtTenXe, txtGia, txtSL)) {
+                    if (SanPhamBUS.sua(
+                        txtMaXe.getText(), txtTenXe.getText(), (String) cboHang.getSelectedItem(), txtGia.getText(), txtSL.getText())) {
+                        showMessage("Sửa sản phẩm thành công!");
+                        loadTableData();
+                    }
                 }
-                if (txtTenXe.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Tên xe không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                if (txtGia.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Giá xe không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                if (txtsl.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "SL xe không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
+            }
+        });
 
-                if(SanPhamBUS.themSanPham(maxe,tenxe,mahang,Gia,sl)){
-                    JOptionPane.showMessageDialog(null, "Thêm sản phẩm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        btnXoa.addActionListener(e -> {
+            if (confirmAction("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
+                if (SanPhamBUS.xoa(txtMaXe.getText())) {
+                    showMessage("Xóa sản phẩm thành công!");
                     loadTableData();
                 }
-                else{JOptionPane.showMessageDialog(null, "Thêm sản phẩm thất bại!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);}
-
-                }
-                else {
-                    // Nếu chọn "Không", không làm gì cả
-                    JOptionPane.showMessageDialog(null, "Hành động bị hủy.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
-        }
-        );
-
-        // sự kiện sửa xe
-        btnSua.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                int option = JOptionPane.showConfirmDialog(
-                    null,
-                    "Bạn có chắc chắn muốn update sản phẩm này?",
-                    "Xác nhận",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE
-                    );
-                    if(option == JOptionPane.YES_OPTION){
-                    String maxe = txtMaXe.getText();
-                    String tenxe = txtTenXe.getText();
-                    String mahang = (String) cboHang.getSelectedItem();
-                    String Gia = txtGia.getText();
-                    String sl =txtsl.getText();
-                    if(SanPhamBUS.sua(maxe, tenxe, mahang, Gia, sl)){
-                        JOptionPane.showMessageDialog(null, "Sửa sản phẩm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                        loadTableData();
-                    }
-            }
-        }
-        });
-
-        btnXoa.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                    int option = JOptionPane.showConfirmDialog(
-                    null,
-                    "Bạn có chắc chắn muốn xóa này?",
-                    "Xác nhận",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE
-                    );
-                    if(option == JOptionPane.YES_OPTION){
-                    String maxe = txtMaXe.getText();
-                    if(SanPhamBUS.xoa(maxe)){
-                        JOptionPane.showMessageDialog(null, "xóa sản phẩm thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                        loadTableData();
-                    }
-            }}
-        });
-
-        btnTimKiem.addActionListener((new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                String tenxe = txtTenXe.getText();
-                List<SanPhamDTO> dstemp = SanPhamBUS.seachname(tenxe);
-                model.setRowCount(0);
-                for (SanPhamDTO sp : dstemp) {
-                    model.addRow(new Object[]{sp.getMaxe(),sp.getTenxe(),sp.getMaHang(),FormatUtil.formatCurrency(sp.getGia()),sp.getSl()});
-                }
-            }
-        }));
-         loadTableData();
-
-         btnChitiet.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                String maXe = txtMaXe.getText();
-                new ChiTietSanPham_GUI(maXe).setVisible(true);
-                
-                
             }
         });
 
+        btnTimKiem.addActionListener(e -> {
+            List<SanPhamDTO> dstemp = SanPhamBUS.seachname(txtTenXe.getText());
+            model.setRowCount(0);
+            for (SanPhamDTO sp : dstemp) {
+                model.addRow(new Object[]{sp.getMaxe(), sp.getTenxe(), sp.getMaHang(), FormatUtil.formatCurrency(sp.getGia()), sp.getSl()});
+            }
+        });
+
+        btnChitiet.addActionListener(e -> {
+            new ChiTietSanPham_GUI(txtMaXe.getText()).setVisible(true);
+        });
+
+        btnLamMoi.addActionListener(e -> {
+            txtMaXe.setText("");
+            txtTenXe.setText("");
+            txtGia.setText("");
+            txtSL.setText("");
+            cboHang.setSelectedIndex(0);
+            loadTableData();
+        });
+
+        // Load dữ liệu ban đầu
+        loadTableData();
     }
 
+    
 
-    public void loadTableData() { 
-        
-        model.setRowCount(0);//xóa hết dữ liệu trong Jtable
-        List<SanPhamDTO> listSP =SanPhamBUS.getAllSanPham();
+
+    private void addFormRow(JPanel panel, GridBagConstraints gbc, int row, JLabel label, JComponent field) {
+        label.setFont(new Font("Arial", Font.PLAIN, 14));
+        gbc.gridx = 0;
+        gbc.gridy = row;
+        gbc.weightx = 0.3;
+        panel.add(label, gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        panel.add(field, gbc);
+    }
+
+    private boolean confirmAction(String message) {
+        int option = JOptionPane.showConfirmDialog(null, message, "Xác nhận", JOptionPane.YES_NO_OPTION);
+        return option == JOptionPane.YES_OPTION;
+    }
+
+    private void showMessage(String message) {
+        JOptionPane.showMessageDialog(null, message);
+    }
+
+    private boolean validateFields(JTextField... fields) {
+        for (JTextField field : fields) {
+            if (field.getText().trim().isEmpty()) {
+                showMessage("Vui lòng điền đầy đủ thông tin!");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void loadTableData() {
+        model.setRowCount(0);
+        List<SanPhamDTO> listSP = SanPhamBUS.getAllSanPham();
         for (SanPhamDTO sp : listSP) {
-            model.addRow(new Object[]{sp.getMaxe(),sp.getTenxe(),sp.getMaHang(),FormatUtil.formatCurrency(sp.getGia()),sp.getSl()});
+            model.addRow(new Object[]{sp.getMaxe(), sp.getTenxe(), sp.getMaHang(), FormatUtil.formatCurrency(sp.getGia()), sp.getSl()});
         }
-
-     
     }
-
-
 }
-
