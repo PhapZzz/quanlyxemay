@@ -4,24 +4,27 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import BUS.ChitietSanPham_BUS;
+import BUS.SanPhamBUS;
 import DAO.ChitietSanPhamDAO;
 import DTO.ChitietSanPhamDTO;
-
+import java.io.File;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class ChiTietSanPham_GUI extends JFrame {
-   private JTable table;
+    private JTable table;
     private DefaultTableModel model;
     private ChitietSanPham_BUS bus = new ChitietSanPham_BUS();
     private JLabel lblImagePreview;
-
+    private JLabel MaChiTietXelbl,MaXelbl,SoKhunglbl,SoMaylbl,MaPhieuNhaplbl,Colorlbl,imglbl,TrangThailbl;
+    private JTextField txtMaChiTietXe,txtMaXe,txtSoKhung,txtSoMay,txtMaPhieuNhap,txtColor,txtimg,txtTrangThai;
+    private String maxe;
     public ChiTietSanPham_GUI(String maXe) {
-
-
-
+            this.maxe = maXe;
             setTitle("Quản lý Chi Tiết Mã Xe "+'"'+maXe+'"');
             setSize(1200, 800);
             setLocationRelativeTo(null);
@@ -38,22 +41,32 @@ public class ChiTietSanPham_GUI extends JFrame {
             gbc.fill = GridBagConstraints.HORIZONTAL;
 
             
-            JLabel MaChiTietXelbl = new JLabel("Nhập mã chi tiết xe: ");
-            JTextField txtMaChiTietXe = new JTextField(18);
-            JLabel MaXelbl = new JLabel("Nhập mã xe: ");
-            JTextField txtMaXe = new JTextField(18);
-            JLabel SoKhunglbl = new JLabel("Nhập Số Khung: ");
-            JTextField txtSoKhung = new JTextField(18);
-            JLabel SoMaylbl = new JLabel("Nhập Số máy: ");
-            JTextField txtSoMay = new JTextField(18);
-            JLabel MaPhieuNhaplbl = new JLabel("Nhập mã phiếu nhập: ");
-            JTextField txtMaPhieuNhap = new JTextField(18);
-            JLabel Colorlbl = new JLabel("Nhập màu xe: ");
-            JTextField txtColor = new JTextField(18);
-            JLabel imglbl = new JLabel("Nhập hình ảnh: ");
-            JTextField txtimg = new JTextField(18);
-            JLabel TrangThailbl = new JLabel("Nhập trạng thái xe: ");
-            JTextField txtTrangThai = new JTextField(18);
+            MaChiTietXelbl = new JLabel("Nhập mã chi tiết xe: ");
+            txtMaChiTietXe = new JTextField(18);
+            MaXelbl = new JLabel("Nhập mã xe: ");
+            txtMaXe = new JTextField(18);
+            txtMaXe.setEditable(false);
+            SoKhunglbl = new JLabel("Nhập Số Khung: ");
+            txtSoKhung = new JTextField(18);
+            SoMaylbl = new JLabel("Nhập Số máy: ");
+            txtSoMay = new JTextField(18);
+            MaPhieuNhaplbl = new JLabel("Nhập mã phiếu nhập: ");
+            txtMaPhieuNhap = new JTextField(18);
+            Colorlbl = new JLabel("Nhập màu xe: ");
+            txtColor = new JTextField(18);
+            imglbl = new JLabel("Nhập hình ảnh: ");
+
+            // gọi panelImg để gộp txtimg và nút chọn hình
+            txtimg = new JTextField(18);
+            JButton btnBrowse = new JButton("...");
+            // btnBrowse.setIcon(new ImageIcon("img/no_evo200.jpg"));
+            JPanel panelImg = new JPanel(new BorderLayout());
+            panelImg.add(txtimg, BorderLayout.CENTER);
+            panelImg.add(btnBrowse, BorderLayout.EAST);
+
+
+            TrangThailbl = new JLabel("Nhập trạng thái xe: ");
+            txtTrangThai = new JTextField(18);
             // các nút chức năng
             RoundButton btnThem = new RoundButton("Thêm",30);
             setButton(btnThem);
@@ -72,7 +85,7 @@ public class ChiTietSanPham_GUI extends JFrame {
             addFormRow(Panel_Left, gbc, row++, SoMaylbl, txtSoMay);
             addFormRow(Panel_Left, gbc, row++, MaPhieuNhaplbl, txtMaPhieuNhap);
             addFormRow(Panel_Left, gbc, row++, Colorlbl, txtColor);
-            addFormRow(Panel_Left, gbc, row++, imglbl, txtimg);
+            addFormRow(Panel_Left, gbc, row++, imglbl, panelImg);
             addFormRow(Panel_Left, gbc, row++, TrangThailbl, txtTrangThai);
 
             JPanel panelButton = new JPanel(new GridLayout(3, 2, 10,10 ));
@@ -116,6 +129,30 @@ public class ChiTietSanPham_GUI extends JFrame {
             // Load dữ liệu từ DAO
             loadData(maXe);
 
+            // sự kiện click vào bảng
+            table.addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent e){
+                    int selectRow = table.getSelectedRow();
+                    if(selectRow != -1){
+                        txtMaChiTietXe.setText(model.getValueAt(selectRow, 0).toString());
+                        txtMaXe.setText(model.getValueAt(selectRow, 1).toString());
+                        txtSoKhung.setText(model.getValueAt(selectRow, 2).toString());
+                        txtSoMay.setText(model.getValueAt(selectRow, 3).toString());
+                        txtMaPhieuNhap.setText(model.getValueAt(selectRow, 4).toString());
+                        txtColor.setText(model.getValueAt(selectRow, 5).toString());
+                        //txtimg.setText(model.getValueAt(selectRow, 6).toString());
+                        txtTrangThai.setText(model.getValueAt(selectRow, 7).toString());
+                    }
+                }
+            });
+
+            // xử lý nút chọn hình ảnh
+            btnBrowse.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e){
+                    chooseImage();
+                }
+            });
 
 
             // xử lý thêm
@@ -130,14 +167,52 @@ public class ChiTietSanPham_GUI extends JFrame {
                     String maphieunhap = txtMaPhieuNhap.getText();
                     String color = txtColor.getText();
                     String img = txtimg.getText();
-                   if(bus.themSanPham(machitietxe, maxe, SoKhung, somay, TrangThai, maphieunhap, color, img)){
-                    loadData(maxe);
-                   }
-                    
-                   
-
+                    if(bus.themSanPham(machitietxe, maxe, SoKhung, somay, TrangThai, maphieunhap, color, img)){
+                     loadData(maxe);
+                    }
                 }
             }); 
+            btnSua.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e){
+                if (confirmAction("Bạn có chắc chắn muốn update sản phẩm này?")) {
+                if (validateFields(txtMaChiTietXe)) {
+                    if (sua()) {
+                        showMessage("Sửa sản phẩm thành công!");
+                        loadData(maXe);
+                            }
+                        }
+                    }
+                }
+            });
+
+            btnXoa.addActionListener(e -> {
+                if (confirmAction("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
+                    if (bus.xoa(txtMaChiTietXe.getText())) {
+                        showMessage("Xóa sản phẩm thành công!");
+                        loadData(maXe);
+                    }
+                }
+            });
+    }
+    // 3 hàm thông báo
+    private boolean confirmAction(String message) {
+        int option = JOptionPane.showConfirmDialog(null, message, "Xác nhận", JOptionPane.YES_NO_OPTION);
+        return option == JOptionPane.YES_OPTION;
+    }
+
+    private void showMessage(String message) {
+        JOptionPane.showMessageDialog(null, message);
+    }
+
+    private boolean validateFields(JTextField... fields) {
+        for (JTextField field : fields) {
+            if (field.getText().trim().isEmpty()) {
+                showMessage("Vui lòng điền đầy đủ thông tin!");
+                return false;
+            }
+        }
+        return true;
     }
     
         private void loadData(String maxe) {
@@ -161,7 +236,7 @@ public class ChiTietSanPham_GUI extends JFrame {
         private ImageIcon getImageIcon(String path) {
             if (path == null || path.isEmpty()) return null;
             try {
-                ImageIcon icon = new ImageIcon("img/no_evo200.jpg");
+                ImageIcon icon = new ImageIcon(path);
                 Image scaled = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
                 return new ImageIcon(scaled);
             } catch (Exception e) {
@@ -169,6 +244,48 @@ public class ChiTietSanPham_GUI extends JFrame {
                 return null;
             }
         }
+
+        private void chooseImage() {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File("img")); 
+            fileChooser.setDialogTitle("Chọn hình ảnh");
+        
+            int result = fileChooser.showOpenDialog(null);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                String imagePath = selectedFile.getAbsolutePath();
+                int index = imagePath.indexOf(File.separator + "img" + File.separator); //xử lý đường dẫn
+                if (index != -1) {
+                    String relativePath = imagePath.substring(index + 1); // Bỏ dấu '/' đầu
+                    txtimg.setText(relativePath);
+                } else {
+                    // Nếu không chứa "/img/", thì để nguyên 
+                    txtimg.setText(imagePath); 
+                }
+
+            }
+        }
+        // xử lý sửa
+        private boolean sua(){
+            String machitietxe = txtMaChiTietXe.getText();
+            String maxe = this.maxe;
+            String SoKhung = txtSoKhung.getText();
+            String somay = txtSoMay.getText();
+            String TrangThai = txtTrangThai.getText();
+            String maphieunhap = txtMaPhieuNhap.getText();
+            String color = txtColor.getText();
+            String img = txtimg.getText();
+            if(bus.suaSanPham(machitietxe, maxe, SoKhung, somay, TrangThai, maphieunhap, color, img)){
+                loadData(maxe);
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+
+
+
 
         private void addFormRow(JPanel panel, GridBagConstraints gbc, int row, JLabel label, JComponent field) {
             label.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -190,6 +307,6 @@ public class ChiTietSanPham_GUI extends JFrame {
     
 
         
-    }
+}
 
 

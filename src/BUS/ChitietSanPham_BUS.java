@@ -31,5 +31,28 @@ public class ChitietSanPham_BUS {
         ChitietSanPhamDTO spnew = new ChitietSanPhamDTO(MaChiTietXe, MaXe, SoKhung, SoMay, TrangThai, MaPhieuNhap, color, img);
         return dao.insert(spnew);
     }
+    public boolean suaSanPham(String MaChiTietXe, String MaXe, String SoKhung, String SoMay, String TrangThai,String MaPhieuNhap,String color,String img){
+        ChitietSanPhamDTO spnew = new ChitietSanPhamDTO(MaChiTietXe, MaXe, SoKhung, SoMay, TrangThai, MaPhieuNhap, color, img);
+        return dao.update(spnew);
+    }
+
+    public boolean xoa(String machitietxe){
+        if(dao.checkmaChiTiet(machitietxe)){
+            if(dao.delete(machitietxe)){return true;}
+            else{
+                JOptionPane.showMessageDialog(null, "không xóa được xe", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return false;}
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "không tìm thấy xe", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+
+
+
+
+
 
 }

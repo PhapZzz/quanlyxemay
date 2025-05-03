@@ -66,4 +66,35 @@ public List<ChitietSanPhamDTO> getAllChiTietXe(String maxe) {
         }
         return false;
     }
+
+    // sửa
+    public boolean update(ChitietSanPhamDTO sp) {
+        String sql = "UPDATE chitietxe SET MaXe=?, SoKhung=?, SoMay=?, TrangThai=?,MaPhieuNhap=?,color=?,img=? WHERE MaChiTietXe=?";
+        try (Connection conn = JDBC.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(8, sp.getMachitietXe());
+            ps.setString(1, sp.getMaxe());
+            ps.setString(2, sp.getSoKhung());
+            ps.setString(3, sp.getSoMay());
+            ps.setString(4, sp.getTrangThai());
+            ps.setString(5, sp.getMaPhieuNhap());
+            ps.setString(6, sp.getColor());
+            ps.setString(7, sp.getImg());
+            
+            return ps.executeUpdate() > 0;// trả về true nếu có ít nhất 1 bản ghi được thêm vào
+        } catch (SQLException e) { e.printStackTrace(); return false; }
+    }
+
+    public boolean delete(String MaChiTietXe) {
+        String sql = "DELETE FROM chitietxe WHERE MaChiTietXe=?";
+        try (
+            Connection conn = JDBC.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)
+            ) {
+            ps.setString(1, MaChiTietXe);
+            return ps.executeUpdate()>0; // trả về true nếu có ít nhất 1 bản ghi bị xóa
+           
+        } catch (SQLException e) { e.printStackTrace(); return false; }
+        
+    }
 }

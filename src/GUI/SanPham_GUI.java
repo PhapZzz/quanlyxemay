@@ -74,11 +74,11 @@ public class SanPham_GUI extends JPanel {
         JPanel panelButton = new JPanel(new GridLayout(3, 2, 15, 15));
         //btnThem = new JButton("Thêm");
         //JButtonDAO btnThem = new JButtonDAO("Thêm");
-        btnThem = new RoundButton("Thêm", 30); 
-        btnThem.setBackground(Color.WHITE); 
-        btnThem.setFont(12, Color.BLACK); 
-        btnThem.setButtonSize(130, 25);
-        btnThem.setBorderWidth(1); 
+        btnThem = new RoundButton("Thêm", 30); //tên và độ cong viền
+        btnThem.setBackground(Color.WHITE);     // màu nền
+        btnThem.setFont(12, Color.BLACK); // màu chữ
+        btnThem.setButtonSize(130, 25); // size
+        btnThem.setBorderWidth(1); // độ dày của viền
 
         btnSua = new RoundButton("Sửa",30);
         btnSua.setBackground(Color.WHITE); 
