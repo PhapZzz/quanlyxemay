@@ -10,7 +10,7 @@ public class index extends JFrame {
 
     public index() {
         setTitle("Motorbike Management");
-        setSize(1100, 700);
+        setSize(1200, 750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);    
         //setOpaque(true);
@@ -24,7 +24,7 @@ public class index extends JFrame {
         // Thêm các "trang" từ class khác
         mainPanel.add(new SanPham_GUI(this), "Sanpham");
         mainPanel.add(new QLNV_GUI(), "Nhanvien");
-        
+        mainPanel.add(new NhaCungCap_GUI(),"NhaCungCap");
         mainPanel.add(createindex_panel(), "home");
         mainPanel.add(new QLKH_GUI(), "KhachHang");
         mainPanel.add(new DoanhSo_GUI(), "DoanhSo");
@@ -129,6 +129,12 @@ public class index extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e){
                 cardLayout.show(mainPanel,"DoanhSo");
+            }
+        });
+        btnNhacungcap.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                cardLayout.show(mainPanel,"NhaCungCap");
             }
         });
     }
