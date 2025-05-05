@@ -28,6 +28,8 @@ public class index extends JFrame {
         mainPanel.add(createindex_panel(), "home");
         mainPanel.add(new QLKH_GUI(), "KhachHang");
         mainPanel.add(new DoanhSo_GUI(), "DoanhSo");
+        mainPanel.add(new PhieuNhap_GUI(),"PhieuNhap");
+        mainPanel.add(new DonHang_GUI(),"DonHang");
         cardLayout.show(mainPanel,"home");
 
         // Menu
@@ -137,6 +139,19 @@ public class index extends JFrame {
                 cardLayout.show(mainPanel,"NhaCungCap");
             }
         });
+        btnPhieunhap.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                cardLayout.show(mainPanel,"PhieuNhap");
+            }
+        });
+        btnHoadon.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                cardLayout.show(mainPanel,"DonHang");
+            }
+        });
+
     }
 
 

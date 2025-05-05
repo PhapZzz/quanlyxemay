@@ -71,4 +71,8 @@ public class NhanVienBUS {
         }
         return ketQua;
     }
+    public boolean checkmanv(int manv){
+        return dao.checkmanv(manv);
+    }
+
 }

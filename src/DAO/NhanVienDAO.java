@@ -50,4 +50,19 @@ public class NhanVienDAO {
         ps.executeUpdate();
         conn.close();
     }
+    public boolean checkmanv(int MaNV){
+        try(Connection conn = JDBC.getConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT MaVN FROM quanlynhanvien WHERE MaNV = ?");
+        )
+        {
+            ps.setInt(1,MaNV);
+            ResultSet rs = ps.executeQuery();
+             return rs.next();
+        
+        }
+        catch (Exception e) {
+            return false;
+        }
+
+    }
 }
