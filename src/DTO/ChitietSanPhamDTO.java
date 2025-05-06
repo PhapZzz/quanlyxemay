@@ -1,5 +1,7 @@
 package DTO;
 
+import java.math.BigDecimal;
+
 public class ChitietSanPhamDTO {
     private String MachitietXe;
     private String Maxe;
@@ -9,6 +11,7 @@ public class ChitietSanPhamDTO {
     private String MaPhieuNhap;
     private String color;
     private String img;
+    private BigDecimal GiaNhap;
     public ChitietSanPhamDTO(String machitietxe, String maxe,String sokhung,String somay,String TrangThai, String maphieunhap, String color, String img){
         this.MachitietXe = machitietxe;
         this.Maxe = maxe;
@@ -18,6 +21,13 @@ public class ChitietSanPhamDTO {
         this.MaPhieuNhap = maphieunhap;
         this.color = color;
         this.img = img;
+        
+    }
+    public BigDecimal getGiaNhap() {
+        return GiaNhap;
+    }
+    public void setGiaNhap(BigDecimal giaNhap) {
+        GiaNhap = giaNhap;
     }
     public String getMachitietXe() {
         return MachitietXe;

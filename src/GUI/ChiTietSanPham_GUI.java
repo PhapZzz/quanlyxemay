@@ -8,6 +8,7 @@ import BUS.SanPhamBUS;
 import DAO.ChitietSanPhamDAO;
 import DTO.ChitietSanPhamDTO;
 import java.io.File;
+import java.math.BigDecimal;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -167,6 +168,7 @@ public class ChiTietSanPham_GUI extends JFrame {
                     String maphieunhap = txtMaPhieuNhap.getText();
                     String color = txtColor.getText();
                     String img = txtimg.getText();
+                    
                     if(bus.themSanPham(machitietxe, maxe, SoKhung, somay, TrangThai, maphieunhap, color, img)){
                      loadData(maxe);
                     }

@@ -38,7 +38,7 @@ public class SanPham_GUI extends JPanel {
         // ======= PANEL LEFT (FORM) =======
         JPanel panelLeft = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(10, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         HangxeBUS hangBUS = new HangxeBUS();
@@ -52,10 +52,15 @@ public class SanPham_GUI extends JPanel {
         JTextField txtTenXe = new JTextField(18);
 
         JLabel lblMaHang = new JLabel("Chọn hãng:");
+        JPanel combo = new JPanel();
         JComboBox<String> cboHang = new JComboBox<>();
         for (String s : listHang) {
             cboHang.addItem(s);
         }
+        JButton themhang = new JButton("thêm");
+        combo.add(cboHang);
+        combo.add(themhang);
+        
 
         JLabel lblGia = new JLabel("Nhập giá bán:");
         JTextField txtGia = new JTextField(18);
@@ -66,7 +71,7 @@ public class SanPham_GUI extends JPanel {
         int row = 0;
         addFormRow(panelLeft, gbc, row++, lblMaXe, txtMaXe);
         addFormRow(panelLeft, gbc, row++, lblTenXe, txtTenXe);
-        addFormRow(panelLeft, gbc, row++, lblMaHang, cboHang);
+        addFormRow(panelLeft, gbc, row++, lblMaHang, combo);
         addFormRow(panelLeft, gbc, row++, lblGia, txtGia);
         addFormRow(panelLeft, gbc, row++, lblSL, txtSL);
 
@@ -162,6 +167,47 @@ public class SanPham_GUI extends JPanel {
                     }
                 }
             }
+        });
+        themhang.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                JTextField tfMaHang = new JTextField();
+        JTextField tfTenHang = new JTextField();
+
+        JPanel panel = new JPanel(new GridLayout(2, 2));
+        panel.add(new JLabel("Mã hãng:"));
+        panel.add(tfMaHang);
+        panel.add(new JLabel("Tên hãng:"));
+        panel.add(tfTenHang);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Thêm hãng mới",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION) {
+            String maHang = tfMaHang.getText().trim();
+            String tenHang = tfTenHang.getText().trim();
+
+            if (maHang.isEmpty() || tenHang.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+
+            // Gọi hàm thêm vào cơ sở dữ liệu ở đây
+            HangxeBUS hangbus = new HangxeBUS();
+            boolean success = hangbus.them(maHang, tenHang);
+
+            if (success) {
+                JOptionPane.showMessageDialog(null, "Thêm hãng thành công!");
+                cboHang.removeAllItems(); // Xóa tất cả item cũ
+                List<String> updatedListHang = hangBUS.getAllHang_Display();
+                for (String s : updatedListHang) {
+                    cboHang.addItem(s); // Thêm lại hãng mới
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Thêm hãng thất bại!");
+            }
+        }
+    }
         });
 
         btnSua.addActionListener(e -> {

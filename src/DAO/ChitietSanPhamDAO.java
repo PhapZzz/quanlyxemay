@@ -4,6 +4,7 @@ import java.util.*;
 
 import DTO.ChitietSanPhamDTO;
 import DTO.SanPhamDTO;
+import DTO.danhsachxe;
 import Util.JDBC;
 
 public class ChitietSanPhamDAO {
@@ -97,4 +98,32 @@ public List<ChitietSanPhamDTO> getAllChiTietXe(String maxe) {
         } catch (SQLException e) { e.printStackTrace(); return false; }
         
     }
+
+    public List<danhsachxe> getChiTietPhieuNhapbymaphieunhap(String maPhieuNhap) {
+        List<danhsachxe> list = new ArrayList<>();
+        try (Connection conn = JDBC.getConnection()) {
+            String sql = "SELECT ctx.MaChiTietXe, x.TenXe, x.GiaBan, ctx.SoKhung, ctx.SoMay,ctx.TrangThai, ctx.color "+
+                            "FROM chitietxe ctx "+
+                            "JOIN xemay x ON ctx.MaXe = x.MaXe "+
+                           "WHERE ctx.MaPhieuNhap = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, maPhieuNhap);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(new danhsachxe(
+                    rs.getString("MaChiTietXe"),
+                    rs.getString("Tenxe"),
+                    rs.getDouble("GiaBan"),
+                    rs.getString("SoKhung"),
+                    rs.getString("SoMay"),
+                    rs.getString("TrangThai"),
+                    rs.getString("color")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }

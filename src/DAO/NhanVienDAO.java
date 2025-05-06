@@ -52,7 +52,7 @@ public class NhanVienDAO {
     }
     public boolean checkmanv(int MaNV){
         try(Connection conn = JDBC.getConnection();
-            PreparedStatement ps = conn.prepareStatement("SELECT MaVN FROM quanlynhanvien WHERE MaNV = ?");
+            PreparedStatement ps = conn.prepareStatement("SELECT MaNV FROM quanlynhanvien WHERE MaNV = ?");
         )
         {
             ps.setInt(1,MaNV);

@@ -1,6 +1,8 @@
 package BUS;
 import java.util.*;
-import java.util.List;
+
+import javax.swing.JOptionPane;
+
 import DAO.HangxeDAO;
 import DTO.HangxeDTO;
 public class HangxeBUS {
@@ -14,5 +16,11 @@ public class HangxeBUS {
             displayList.add(hx.getMaHang() + " (" + hx.getTenHang() + ")");
         }
         return displayList;
+    }
+    public boolean them(String maHang, String tenHang){
+        if(dao.them(new HangxeDTO(maHang, tenHang))){
+            return true;
+        }
+        else{return false;}
     }
 }

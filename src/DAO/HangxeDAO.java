@@ -23,4 +23,15 @@ public class HangxeDAO {
         } catch (SQLException e) { e.printStackTrace(); }
         return list;
     }
+    public boolean them(HangxeDTO a){
+        try (Connection conn = JDBC.getConnection();
+        PreparedStatement ps = conn.prepareStatement("INSERT INTO hangxe VALUES (?, ?)");
+        ) {
+            ps.setString(1, a.getMaHang());
+            ps.setString(2, a.getTenHang());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace(); return false;
+        }
+    }
 }

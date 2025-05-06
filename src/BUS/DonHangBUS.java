@@ -30,4 +30,8 @@ public class DonHangBUS {
     public List<DonHangDTO> timKiemTheoTenKhachHang(String keyword) {
         return donHangDAO.searchByCustomerName(keyword);
     }
+    public List<DonHangDTO> timKiemTheoNgay(String fromDate, String toDate) {
+        return donHangDAO.searchByDateRange(fromDate, toDate);
+    }
+    
 }

@@ -35,8 +35,15 @@ public class NhanVienBUS {
     }
 
     public void xuLyXoa(int maNV) {
+        // Kiểm tra quyền xóa, chỉ admin mới có quyền xóa
+        if (!login_BUS.quyenXoa) { // Kiểm tra xem quyenXoa có bằng true (admin) không
+            JOptionPane.showMessageDialog(null, "Bạn không có quyền xóa nhân viên!");
+            return;
+        }
+
         try {
             dao.deleteNhanVien(maNV);
+            JOptionPane.showMessageDialog(null, "Xóa nhân viên thành công.");
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Xóa nhân viên thất bại.");
@@ -71,8 +78,8 @@ public class NhanVienBUS {
         }
         return ketQua;
     }
-    public boolean checkmanv(int manv){
+
+    public boolean checkmanv(int manv) {
         return dao.checkmanv(manv);
     }
-
 }

@@ -23,6 +23,17 @@ public class PhieuNhap_GUI extends JPanel {
         model = new DefaultTableModel();
         model.setColumnIdentifiers(new String[]{"Mã Phiếu Nhập", "Mã NCC", "Mã NV", "Ngày Nhập"});
         table = new JTable(model);
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = table.getSelectedRow();
+                if (selectedRow >= 0) {
+                    // Ví dụ: lấy giá trị từ cột 0 và cột 1
+                    String maphieunhap = model.getValueAt(selectedRow, 0).toString();
+                    new InPhieuNhap(maphieunhap);
+                }
+            }
+        });
         JScrollPane scrollPane = new JScrollPane(table);
 
         // Panel nút

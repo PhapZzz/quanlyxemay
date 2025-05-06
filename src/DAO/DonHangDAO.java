@@ -95,4 +95,28 @@ public class DonHangDAO {
         }
         return list;
     }
+    public List<DonHangDTO> searchByDateRange(String from, String to) {
+        List<DonHangDTO> list = new ArrayList<>();
+        try {
+            Connection conn = JDBC.getConnection();
+            String sql = "SELECT * FROM donhang WHERE NgayMua BETWEEN ? AND ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setDate(1, Date.valueOf(from));
+            stmt.setDate(2, Date.valueOf(to));
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(new DonHangDTO(
+                    rs.getString("MaDonHang"),
+                    rs.getDate("NgayMua").toString(),
+                    rs.getString("TenKhachHang"),
+                    rs.getDouble("TongTien")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    
 }

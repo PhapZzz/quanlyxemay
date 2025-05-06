@@ -28,7 +28,7 @@ public class SanPhamDAO {
     }
 
     public boolean insert(SanPhamDTO sp) {
-        String sql = "INSERT INTO xemay VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO xemay (MaXe, TenXe, MaHang, GiaBan, sl) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = JDBC.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, sp.getMaxe());

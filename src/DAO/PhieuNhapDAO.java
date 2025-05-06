@@ -1,6 +1,7 @@
 package DAO;
 
 import DTO.PhieuNhapDTO;
+import DTO.chitietphieunhapDTO;
 import Util.JDBC;
 
 import java.sql.*;
@@ -47,4 +48,32 @@ public class PhieuNhapDAO {
         }
         return list;
     }
+    public chitietphieunhapDTO getThongTinPhieuNhap(String maPhieuNhap) {
+        chitietphieunhapDTO dto = null;
+        try (Connection conn = JDBC.getConnection()) {
+            String sql = "SELECT pn.MaPhieuNhap, pn.NgayNhap, ncc.TenNCC, ncc.DiaChi, ncc.SDT, nv.TenNV " +
+                         "FROM phieunhap pn " +
+                         "JOIN nhacungcap ncc ON pn.MaNCC = ncc.MaNCC " +
+                         "JOIN quanlynhanvien nv ON pn.MaNV = nv.MaNV " +
+                         "WHERE pn.MaPhieuNhap = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, maPhieuNhap);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                // Không cần chuyển đổi ở đây nữa vì bạn đã sử dụng maPhieuNhap là int khi gọi setInt
+                dto = new chitietphieunhapDTO(
+                    rs.getInt("MaPhieuNhap"), // Trực tiếp sử dụng getInt("MaPhieuNhap")
+                    rs.getDate("NgayNhap"),
+                    rs.getString("TenNCC"),
+                    rs.getString("DiaChi"),
+                    rs.getString("SDT"),
+                    rs.getString("TenNV")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dto;
+    }
 }
+

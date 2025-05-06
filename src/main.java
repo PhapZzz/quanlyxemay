@@ -3,7 +3,8 @@ import GUI.index;
 
 public class main {
     public static void main(String[] args) {
-        index s = new index();
-        s.setVisible(true);
+        // Hiển thị giao diện đăng nhập
+        Login_GUI login = new Login_GUI();
+        login.setVisible(true);
     }
 }
